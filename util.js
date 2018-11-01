@@ -1,6 +1,7 @@
 'use strict'
 
 const fs = require('fs')
+const https = require('https')
 const moment = require('moment')
 const personalUserId = process.env.personalUserId
 const selfBotTrigger = process.env.selfBotTrigger
@@ -68,9 +69,36 @@ const searchCommand = message => {
   }
 }
 
+const apiCall = (options, json = true) => {
+  return new Promise((resolve, reject) => {
+    /*
+    const options = {
+      hostname: www.example.com',
+      path: `/your/path?and=query&test=1`,
+      method: 'GET',
+      headers: {}
+    }
+    */
+    options.port = 443
+    options.headers['User-Agent'] = 'bot'
+
+    let body = ''
+    const req = https.request(options, res => {
+      res.on('data', chunk => (body += chunk))
+      res.on('end', () => {
+        if (res.statusCode === 200) resolve(json ? JSON.parse(body) : body)
+        else reject({ res, body: json ? JSON.parse(body) : body })
+      })
+    })
+    req.on('error', e => reject(e))
+    req.end()
+  })
+}
+
 module.exports = {
   delay,
   timestamp,
   logger,
-  searchCommand
+  searchCommand,
+  apiCall
 }
