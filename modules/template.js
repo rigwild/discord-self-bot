@@ -10,7 +10,9 @@
  * @param other {integer} all other parameters to the last one
  */
 
-const { logger, delay } = require('../util')
+const {
+  /* logger, delay*/
+} = require('../util')
 
 // Minimum arguments required by the module. Does not include the "Channel" arg.
 const minArgsCount = 3
