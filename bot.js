@@ -8,6 +8,7 @@ const Discord = require('discord.js')
 const { searchCommand } = require('./util')
 
 const bot = new Discord.Client()
+
 bot.login(discordAuthToken)
 
 bot.on('message', message => searchCommand(message))

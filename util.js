@@ -15,12 +15,12 @@ const timestamp = () => moment().format('YYYY-MM-DD HH:mm:ss')
 const logger = (...x) => console.log(timestamp() + ' - ', ...x)
 
 // Catch an error
-const catchedError = (commandName, err) => {
-  console.error(`${timestamp()} Command error "${commandName}" :\n`, err.stack)
+const catchedError = (trueMessage, commandName, err) => {
+  console.error(`\n${timestamp()} - Error from module "${commandName}". Received command : ${trueMessage}\n`, err.stack)
 }
 
 // Get all available modules name
-const getModules = () => fs.readdirSync('./modules/').map(x => x.replace('.js', '').toLowerCase())
+const getModules = () => fs.readdirSync('./modules/').map(x => x.replace('.js', ''))
 
 // Get command args
 const getCommandArgs = messageContent => {
@@ -52,7 +52,8 @@ const searchCommand = message => {
 
         if (commandArgs.length >= mod.minArgsCount) {
           // Everything is fine, module starts
-          mod.start(...commandArgs)
+          logger(`Module "${selectedModule}" used. Received command : ${trueMessage}`)
+          mod.start(message.channel, ...commandArgs).catch(e => catchedError(trueMessage, selectedModule, e))
         }
         else {
           // Not enough parameter to start the module
@@ -71,6 +72,5 @@ module.exports = {
   delay,
   timestamp,
   logger,
-  searchCommand,
-  catchedError
+  searchCommand
 }
