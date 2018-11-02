@@ -17,10 +17,12 @@ const minArgsCount = 1
 const gApiKey = process.env.googleCustomSearchApiKey
 const searchEngineId = process.env.googleCustomSearchEngineId
 
+const apiOptions = `?key=${gApiKey}&cx=${searchEngineId}&prettyPrint=false&searchType=image&imgSize=xlarge`
+
 const getFromGoogleImage = query =>
   apiCall({
     hostname: 'www.googleapis.com',
-    path: `/customsearch/v1?key=${gApiKey}&cx=${searchEngineId}&prettyPrint=false&searchType=image&q=${query}`,
+    path: `/customsearch/v1${apiOptions}&q=${query}`,
     method: 'GET',
     port: 443,
     headers: { 'User-Agent': 'bot' }
@@ -29,10 +31,8 @@ const getFromGoogleImage = query =>
 // Function started by the module manager
 const start = async (channel, ...commandArgs) => {
   const res = await getFromGoogleImage(encodeURIComponent(commandArgs[0]))
-
-  if (res && res.hasOwnProperty('items')) {
-    channel.send(res.items[0].image.thumbnailLink)
-  }
+  const link = res.items[0].link
+  channel.send({ files: [link] })
 }
 
 module.exports = {
