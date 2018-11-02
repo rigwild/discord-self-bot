@@ -17,7 +17,7 @@ const minArgsCount = 1
 const gApiKey = process.env.googleCustomSearchApiKey
 const searchEngineId = process.env.googleCustomSearchEngineId
 
-const apiOptions = `?key=${gApiKey}&cx=${searchEngineId}&prettyPrint=false&searchType=image&imgSize=xlarge`
+const apiOptions = `?key=${gApiKey}&cx=${searchEngineId}&prettyPrint=false&searchType=image&imgSize=large&gl=fr`
 
 const getFromGoogleImage = query =>
   apiCall({
