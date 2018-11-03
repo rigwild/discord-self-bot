@@ -2,10 +2,12 @@
 
 /**
  * This module sends a message converting the text to letters emojies
- * Usage : google(query)
+ * Usage : letter(query)
  *
  * @param query {string} search terms
  */
+
+const { convertSpecialChars } = require('../util')
 
 // Minimum arguments required by the module. Does not include the "Channel" arg.
 const minArgsCount = 1
@@ -56,9 +58,7 @@ const convert = [
 
 // Function started by the module manager
 const start = async (channel, ...commandArgs) => {
-  const newMessage = commandArgs[0]
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  const newMessage = convertSpecialChars(commandArgs[0])
     .split('')
     .map(x => {
       const res = convert.find(y => y.char === x.toLowerCase())
