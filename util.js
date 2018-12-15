@@ -25,9 +25,9 @@ const getCommandArgs = messageContent => {
 }
 
 // Check if selfbot call and if is a valid module
-const searchCommand = message => {
+const searchCommand = async message => {
   if (message.author.id === personalUserId && message.content.startsWith(selfBotTrigger)) {
-    message.delete()
+    await message.delete()
 
     // Remove file extension
     const trueMessage = message.content.slice(selfBotTrigger.length).trim()

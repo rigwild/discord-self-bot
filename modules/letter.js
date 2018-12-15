@@ -13,12 +13,13 @@ const { strToEmojiArr } = require('../util')
 const minArgsCount = 1
 
 // Function started by the module manager
-const start = (channel, ...commandArgs) => {
+const start = async (channel, ...commandArgs) => {
   const message = strToEmojiArr(commandArgs[0])
     .map(x => x.str)
     .join('')
 
   channel.send(message)
+  throw new Error('ntm fdp')
 }
 
 module.exports = {
