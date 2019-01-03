@@ -2,7 +2,7 @@
 
 /**
  * This module deletes the last messages sent by the user.
- * Usage : delete(userId, amount)
+ * Usage : delete(amount[, userId, before])
  *
  * @param amount {integer} amount of messages find (others included)
  * @param userId {string} the id of the users to delete messages from
@@ -23,10 +23,10 @@ const start = async (channel, ...commandArgs) => {
   if (!userId) throw new Error('No user id was specified')
 
   // Fetch messages in the current channel
-  const options = { limit: amount, before: commandArgs[2] }
+  const options = { limit: amount, before: commandArgs[2] || null }
+
   let messages = await channel.fetchMessages(options)
   messages = messages.filter(x => x.author.id === userId && x.deletable && !x.deleted)
-
   // Delete the messages with a delay
   let delay = 200
   messages.forEach(aMessage => {
